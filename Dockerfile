@@ -2,30 +2,32 @@ FROM ubuntu:14.04
 
 ENV TERM xterm
 
-RUN apt-get update -y && apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:ondrej/php && \
+RUN apt-get update -y && apt-get install -y software-properties-common language-pack-en-base && \
+    LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/php-7.0 && \
     apt-get update -y && apt-get install -y \
     vim \
     mc \
     acl \
     apache2 \
     python-pycurl \
-    php5 \
-    php-apc \
-    php5-cli \
-    php5-gd \
-    php5-mysql \
-    php5-curl \
-    php5-intl \
-    php5-mcrypt \
-    php5-xdebug \
+    php7.0 \
+    php7.0-cli \
+    php7.0-gd \
+    php7.0-mysql \
+    php7.0-curl \
+    php7.0-intl \
+    php7.0-mcrypt \
+    php-xdebug \
     python-mysqldb \
-    python-selinux
+    python-selinux && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY application.conf /etc/apache2/sites-available/application.conf
-COPY php_config.ini /etc/php5/mods-available/
-COPY xdebug.ini /etc/php5/mods-available/
-RUN ln -s /etc/php5/mods-available/php_config.ini /etc/php5/apache2/conf.d/
+COPY php_config.ini /etc/php/7.0/mods-available/
+COPY xdebug.ini /etc/php/7.0/mods-available/
+RUN ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/apache2/conf.d/ && \
+    ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/cli/conf.d/
 
 RUN a2enmod rewrite && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
