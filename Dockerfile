@@ -24,10 +24,9 @@ RUN apt-get update -y && apt-get install -y software-properties-common language-
     rm -rf /var/lib/apt/lists/*
 
 COPY application.conf /etc/apache2/sites-available/application.conf
-COPY php_config.ini /etc/php/7.0/mods-available/
-COPY xdebug.ini /etc/php/7.0/mods-available/
-RUN ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/apache2/conf.d/ && \
-    ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/cli/conf.d/
+COPY php_config.ini /etc/php/mods-available/
+RUN ln -s /etc/php/mods-available/php_config.ini /etc/php/7.0/apache2/conf.d/80-php_config.ini && \
+    ln -s /etc/php/mods-available/php_config.ini /etc/php/7.0/cli/conf.d/80-php_config.ini
 
 RUN a2enmod rewrite && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
