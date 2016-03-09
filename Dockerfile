@@ -33,9 +33,10 @@ RUN a2enmod rewrite && \
     a2dissite 000-default && \
     a2dissite default-ssl && \
     a2ensite application && \
-    rm -rf /var/www/html
+    rm -rf /var/www/html && \
+    usermod -s /bin/bash www-data
 
 VOLUME /var/www/application
 EXPOSE 80
 
-CMD /usr/sbin/apache2ctl -D FOREGROUND
+CMD rm -f /var/run/apache2/apache2.pid && /usr/sbin/apache2ctl -D FOREGROUND
