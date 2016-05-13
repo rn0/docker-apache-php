@@ -1,32 +1,31 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 ENV TERM xterm
 
 RUN apt-get update -y && apt-get install -y software-properties-common language-pack-en-base && \
-    LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/php && \
-    LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/apache2 && \
     apt-get update -y && apt-get install -y \
     vim \
     mc \
     acl \
     apache2 \
-    libapache2-mod-php7.0 \
+    libapache2-mod-php \
     python-pycurl \
-    php7.0 \
-    php7.0-cli \
-    php7.0-gd \
-    php7.0-mysql \
-    php7.0-curl \
-    php7.0-intl \
-    php7.0-mcrypt \
-    php7.0-xml \
-    php7.0-xmlrpc \
-    php7.0-readline \
-    php7.0-json \
-    php7.0-sqlite3 \
-    php7.0-mbstring \
-    php7.0-soap \
-    php7.0-zip \
+    php \
+    php-cli \
+    php-gd \
+    php-curl \
+    php-intl \
+    php-mcrypt \
+    php-bcmath \
+    php-xml \
+    php-xml-rpc2 \
+    php-readline \
+    php-json \
+    php-mysql \
+    php-sqlite3 \
+    php-mbstring \
+    php-soap \
+    php-zip \
     php-xdebug \
     python-mysqldb \
     python-selinux && \
@@ -51,4 +50,4 @@ EXPOSE 80
 
 WORKDIR /var/www/application
 
-CMD rm -f /var/run/apache2/apache2.pid && /usr/sbin/apache2ctl -D FOREGROUND
+CMD rm -f /run/apache2/apache2.pid && /usr/sbin/apache2ctl -D FOREGROUND
