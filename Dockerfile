@@ -1,41 +1,44 @@
-FROM ubuntu:16.04
+FROM ubuntu:14.04
 
 ENV TERM xterm
+ENV LANG en_US.UTF-8
 
 RUN apt-get update -y && apt-get install -y software-properties-common language-pack-en-base && \
-    apt-get update -y && apt-get install -y \
+    export LANG=en_US.UTF-8 && add-apt-repository ppa:ondrej/php && add-apt-repository ppa:ondrej/php-qa && apt-get update -y && apt-get install -y \
     vim \
     mc \
+    git \
     acl \
     apache2 \
-    libapache2-mod-php \
+    libapache2-mod-php5.6 \
     python-pycurl \
-    php \
-    php-cli \
-    php-gd \
-    php-curl \
-    php-intl \
-    php-mcrypt \
-    php-bcmath \
-    php-xml \
-    php-xml-rpc2 \
-    php-readline \
-    php-json \
-    php-mysql \
-    php-sqlite3 \
-    php-mbstring \
-    php-soap \
-    php-zip \
+    php5.6 \
+    php5.6-cli \
+    php5.6-gd \
+    php5.6-curl \
+    php5.6-intl \
+    php5.6-mcrypt \
+    php5.6-bcmath \
+    php5.6-xml \
+    php5.6-readline \
+    php5.6-json \
+    php5.6-mysql \
+    php5.6-sqlite3 \
+    php5.6-mbstring \
+    php5.6-soap \
+    php5.6-zip \
     php-xdebug \
     python-mysqldb \
     python-selinux && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/bin && php -r "unlink('composer-setup.php');"
+
 COPY application.conf /etc/apache2/sites-available/application.conf
-COPY php_config.ini /etc/php/7.0/mods-available/
-RUN ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/apache2/conf.d/80-php_config.ini && \
-    ln -s /etc/php/7.0/mods-available/php_config.ini /etc/php/7.0/cli/conf.d/80-php_config.ini
+COPY php_config.ini /etc/php/5.6/mods-available/
+RUN ln -s /etc/php/5.6/mods-available/php_config.ini /etc/php/5.6/apache2/conf.d/80-php_config.ini && \
+    ln -s /etc/php/5.6/mods-available/php_config.ini /etc/php/5.6/cli/conf.d/80-php_config.ini
 
 RUN a2enmod rewrite && \
     echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
@@ -44,6 +47,8 @@ RUN a2enmod rewrite && \
     a2ensite application && \
     rm -rf /var/www/html && \
     usermod -s /bin/bash www-data
+
+RUN chown -R www-data:www-data /var/www
 
 VOLUME /var/www/application
 EXPOSE 80
