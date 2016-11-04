@@ -37,6 +37,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 COPY application.conf /etc/apache2/sites-available/application.conf
 COPY php_config.ini /etc/php/5.6/mods-available/
+COPY php_xdebug.ini /etc/php/5.6/mods-available/xdebug.ini
 RUN ln -s /etc/php/5.6/mods-available/php_config.ini /etc/php/5.6/apache2/conf.d/80-php_config.ini && \
     ln -s /etc/php/5.6/mods-available/php_config.ini /etc/php/5.6/cli/conf.d/80-php_config.ini
 
